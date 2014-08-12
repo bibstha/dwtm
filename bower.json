@@ -1,0 +1,11 @@
+{
+  "name": "dwtm",
+  "version": "1.0.0",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "jquery-flot": "0.8.3"
+  }
+}
