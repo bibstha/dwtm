@@ -39,7 +39,7 @@
     return vals = [netto, netto + rv, netto + rv + lh, effective_wage];
   };
 
-  plot = function(data, placeholder) {
+  plot = function(data) {
     var amount, datum, i, total_plot, total_plot_length, _i, _j, _len, _len1, _ref;
     total_plot_length = data[0].amounts.length;
     total_plot = [];
@@ -52,16 +52,10 @@
         total_plot[i].push([datum.hour, amount]);
       }
     }
-    return $.plot(placeholder, [
-      {
-        label: "ew",
-        data: total_plot[3],
-        yaxis: 2
-      }
-    ]);
+    return total_plot;
   };
 
-  draw_plot = function(hourly_rate, placeholder) {
+  draw_plot = function(hourly_rate) {
     var data, hours_max, hours_min, hours_step, i, _i;
     hours_min = 0;
     hours_max = 80;
@@ -73,12 +67,16 @@
         amounts: get_pay_amount(hourly_rate, i)
       });
     }
-    return plot(data, placeholder);
+    return plot(data);
   };
 
   main = function() {
-    draw_plot(25, "#placeholder_1");
-    return draw_plot(33, "#placeholder_2");
+    var total_plot;
+    total_plot = [];
+    [5, 10, 15, 20, 25, 30, 35, 40].map(function(x) {
+      return total_plot.push(draw_plot(x)[3]);
+    });
+    return $.plot("#placeholder", total_plot);
   };
 
   $(document).ready(function() {

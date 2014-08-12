@@ -44,7 +44,7 @@ get_pay_amount = (rate, hour) ->
   # dummy.map (x) ->
   #   x * k
 
-plot = (data, placeholder) ->
+plot = (data) ->
   total_plot_length = data[0].amounts.length
   total_plot = []
 
@@ -53,15 +53,9 @@ plot = (data, placeholder) ->
       total_plot[i] ||= []
       total_plot[i].push [datum.hour, amount]
 
-  $.plot(placeholder, [
-    # { label: "netto", data: total_plot[0] },
-    # { label: "rv", data: total_plot[1] },
-    # { label: "lh", data: total_plot[2] },
-    { label: "ew", data: total_plot[3], yaxis: 2 },
-  ])
-  
+  total_plot
 
-draw_plot = (hourly_rate, placeholder) ->
+draw_plot = (hourly_rate) ->
 
   hours_min = 0
   hours_max = 80
@@ -71,11 +65,24 @@ draw_plot = (hourly_rate, placeholder) ->
   for i in [hours_min..hours_max] by hours_step
     data.push {hour: i, amounts: get_pay_amount(hourly_rate, i)}
   
-  plot(data, placeholder)
+  plot(data)
 
 main = ->
-  draw_plot(25, "#placeholder_1")
-  draw_plot(33, "#placeholder_2")
+  total_plot = []
+  [5, 10, 15, 20, 25, 30, 35, 40].map (x) ->
+    total_plot.push draw_plot(x)[3]
+    # draw_plot(33).map (x) ->
+    #   total_plot.push x
+
+
+  $.plot("#placeholder",
+    # # { label: "netto", data: total_plot[0] },
+    # # { label: "rv", data: total_plot[1] },
+    # # { label: "lh", data: total_plot[2] },
+    # { label: "25", data: total_plot[3]},
+    # { label: "33", data: total_plot[7]},
+    total_plot
+  )
 
 $(document).ready ->
   main()
